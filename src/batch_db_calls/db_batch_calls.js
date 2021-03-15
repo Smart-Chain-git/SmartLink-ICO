@@ -2,7 +2,7 @@
  * @module smart-link-ICO
  * @author Smart-Chain
  * @version 1.0.0
- * This module 
+ * This module retrives the list of reception addresses and their SMAK amounts, devides it in batches and sends batched transactions to the Tezos Blockchain. 
  */
 
 const mysql2 = require('mysql2/promise');    // Used to communicate with the Database
@@ -31,7 +31,7 @@ signer.importKey(
     config.SIGNER_PASSWORD, 
     config.SIGNER_MNEMONIC, 
     config.SIGNER_SECRET
-);
+); 
 
 /**
 * Function that connects to the database, it takes parameters from config file
@@ -85,7 +85,7 @@ async function getBatchesFromDb(connection)
     }
 
     // Batching the results
-    const data_batches = await chunk(results, 2);
+    const data_batches = await chunk(results, config.TRANSACTIONS_PER_BATCH);
 
     return data_batches;
 }
@@ -140,7 +140,6 @@ async function prepareBatchToSendToBlockchain(contract, data)
 }
 
 /////////////////////////////////////////// BLOCKCHAIN  ///////////////////////////////////////////
-
 /**
 * Computes Freeze Duration, substraction between the final date and today's date
 * @param connection   - database connection
@@ -150,7 +149,6 @@ async function sendBatchesToBlockchain(connection, data_batch)
 {
     // Get the contract
     const contract = await Tezos.contract.at(config.CONTRACT_ADDRESS);
-
 
     // Prepare the batch to send
     for(var i = 0; i < data_batch.length; i++)
@@ -246,7 +244,3 @@ async function main()
 }
 
 main();
-
-
-
-

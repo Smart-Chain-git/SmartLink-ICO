@@ -20,6 +20,7 @@ module.exports = {
     ICO_DEADLINE: process.env.ICO_DEADLINE,
     SMAK_VALUE: process.env.SMAK_VALUE,
     SMAK_ACCURACY: process.env.SMAK_ACCURACY,
+    TRANSACTIONS_PER_BATCH: process.env.TEZOS_API,
 
     // Signer Variables
     SIGNER_EMAIL: process.env.SIGNER_EMAIL,
