@@ -43,6 +43,7 @@ module.exports = {
     ETHEREUM_API: process.env.ETHEREUM_API || 'https://api-ropsten.etherscan.io',
     REVOLUT_API: process.env.REVOLUT_API || 'https://sandbox-b2b.revolut.com',
 
+    // fixed EUR/USD rate
     EUR_USD_RATE: process.env.EUR_USD_RATE || 0.84
 
   }
