@@ -10,8 +10,13 @@ output/
 *.env
 !development.env
 local.env
+prod.env
 *.env.local
 *.env.*.local
+
+# certificate
+privatekey.pem
+publickey.cer
 
 # Log files
 npm-debug.log*
