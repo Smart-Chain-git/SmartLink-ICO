@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fetch": "node src/transactions_listener_and_updater/task.js",
+    "cronJob": "node src/cronJob.js",
+    "fetch": "node src/task.js",
     "batch": "node src/batch_db_calls/db_batch_calls.js",
     "originate": "node src/contract/originate.js",
-    "export":"node src/export_csv/export_csv.js"
+    "export": "node src/export_csv/export_csv.js"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.1",
@@ -15,6 +16,7 @@
     "@taquito/taquito": "^8.0.1-beta.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "mysql2": "^2.2.5"
   },
