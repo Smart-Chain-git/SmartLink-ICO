@@ -1,6 +1,7 @@
 var signer = require("@taquito/signer");
 var taquito = require("@taquito/taquito");
 const config = require('../../config/config.js');
+var storage = require('./ICO-contract-storage')
 
 var Tezos = new taquito.TezosToolkit(config.RPC_ADDRESS);
 // Import the signer account
@@ -17,7 +18,7 @@ async function originate()
     // Originate the contract
     const originationOp = await Tezos.contract.originate({
         code: require('./ICO-contract.json'),
-        init: require('./ICO-contract-storage.json')
+        init: storage
     }).catch(error => {
         console.log(error)
     });

@@ -13,13 +13,15 @@ module.exports = {
     // Tezos Network variables
     RPC_ADDRESS: process.env.RPC_ADDRESS,
     CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
-
+    ADDRESS: process.env.ADDRESS,
+    SUPPLY: process.env.SUPPLY,
+    
     // Signer Variables
     SIGNER_EMAIL: process.env.SIGNER_EMAIL,
     SIGNER_PASSWORD: process.env.SIGNER_PASSWORD,
     SIGNER_MNEMONIC: process.env.SIGNER_MNEMONIC,
     SIGNER_SECRET: process.env.SIGNER_SECRET,
-    
+
     // Database variables
     DB_HOST: process.env.DB_HOST,
     DB_USER: process.env.DB_USER,
