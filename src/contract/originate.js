@@ -1,10 +1,19 @@
-var signer = require("@taquito/signer");
-var taquito = require("@taquito/taquito");
-const config = require('../../config/config.js');
-var storage = require('./ICO-contract-storage')
+/**
+ * @module smart-link-ICO
+ * @author Smart-Chain
+ * @version 1.0.0
+ * This module originates a FA 1.2 token smart contract with a freeze function
+ */
 
+var signer = require("@taquito/signer"); // Used to initialize a signer
+var taquito = require("@taquito/taquito"); // Used for the taquito calls to the smart contract
+const config = require('../../config/config.js'); // Config file with config variables
+var storage = require('./ICO-contract-storage') // Initial storage of the smart contract
+
+// Connection to the Tezos RPC
 var Tezos = new taquito.TezosToolkit(config.RPC_ADDRESS);
-// Import the signer account
+
+// Import the signer key
 signer.importKey(
     Tezos, 
     config.SIGNER_EMAIL, 
@@ -13,23 +22,30 @@ signer.importKey(
     config.SIGNER_SECRET
 );
 
+/**
+* Function that originates a smart contract with the signer key
+*/
 async function originate()
 {
     // Originate the contract
     const originationOp = await Tezos.contract.originate({
+        // Smart contract Michelson JSON code
         code: require('./ICO-contract.json'),
         init: storage
-    }).catch(error => {
+    })
+    .catch(error => {
         console.log(error)
     });
 
-    console.log("Waiting for confirmation of origination for " + originationOp.contractAddress + "...");
+    console.log("SmartLink API: Waiting for confirmation of origination for " + originationOp.contractAddress + "...");
     
-    // Get the originated contract
-    const contract = await originationOp.contract().catch(error => {
+    // Waiting for the origination to be completed/confirmed 
+    await originationOp.confirmation()
+    .catch(error => {
         console.log(error)
     });
-    console.log("Origination completed.");
+
+    console.log("SmartLink API: Origination completed.");
     
 }
 
