@@ -12,7 +12,7 @@ const fs = require("fs/promises") // Used to write/create files
 const config = require('../../config/config.js'); // Used to retrieve configuration variables
 
 /** 
- *Retrieves information about participants that validated the kyc but did not send any funds
+ * Retrieves information about participants that validated the kyc but did not send any funds
  * Information retrieved: kyc id, sender address type, sender address, reception address and mail
  */
 const export_only_kyc = "SELECT id_kyc, addr_type, k.sender_addr, reception_addr,  mail  FROM kyc k LEFT JOIN transactions t ON t.sender_addr = k.sender_addr WHERE tx_hash IS NULL";
@@ -69,13 +69,21 @@ async function writeToCSV(data, file_name){
     // Parsing the retrieved data object from the database into a JSON
     const jsonData = JSON.parse(JSON.stringify(data));
 
-    // Converting the json to a csv
-    const json2csvParser = new Json2csvParser({ header: true});
-    const csv = json2csvParser.parse(jsonData);
-
-    // Writing the csv into a file
-    await fs.writeFile(file_name+".csv", csv);
-    console.log("Smartlink ICO API: Write to csv successfully!");
+    if(jsonData.length < 1)
+    {
+        console.log("Smartlink ICO API: Nothing to write to "+file_name+".csv !");
+    }
+    else
+    {
+         // Converting the json to a csv
+         const json2csvParser = new Json2csvParser({ header: true});
+         const csv = json2csvParser.parse(jsonData);
+ 
+         // Writing the csv into a file
+         await fs.writeFile("output/"+file_name+".csv", csv);
+         console.log("Smartlink ICO API: Write to "+file_name+".csv successfully!");
+    }
+    
 
 }
 
@@ -84,11 +92,8 @@ async function writeToCSV(data, file_name){
  * @param {Object} data - data retrieved from the database, to convert into CSV and write into a file
  * @param {string} file_name - name of the output csv file
  */
-async function getData(query)
-{
-    // Connection to the database
-    const connection = await connectToDb();
-      
+async function getData(connection, query)
+{      
     // Querying the database for participants and their invested amounts
     console.log("Smartlink ICO API: Querying the database...");
     const [results, columns_def] = await connection.execute(query);	
@@ -102,9 +107,6 @@ async function getData(query)
         console.log("Smartlink ICO API: No data to export!")
     }
 
-    // Ending the connection
-    endDbConnection(connection)
-
     return results
 }
 
@@ -115,15 +117,21 @@ async function main(){
     await fs.mkdir(dir, { recursive: true });
     console.log("Directory is created.");
 
-    // Querying the database
-    const kyc_data = await getData(export_only_kyc, "output/kyc")
-    const transactions_data = await getData(export_only_transactions, "output/transactions")
-    const smak_operations_data = await getData(export_smak_transactions, "output/smak_transactions")
+    // Connecting to database
+    const connection = await connectToDb();
 
+    // Querying the database
+    const kyc_data = await getData(connection, export_only_kyc)
+    const transactions_data = await getData(connection, export_only_transactions)
+    const smak_operations_data = await getData(connection, export_smak_transactions)
+    
+    // Ending the connection
+    endDbConnection(connection)
+    
     // Writing data into a file
-    await writeToCSV(kyc_data, "output/kyc")
-    await writeToCSV(transactions_data, "output/transactions")
-    await writeToCSV(smak_operations_data, "output/smak_transactions")
+    await writeToCSV(kyc_data, "kyc")
+    await writeToCSV(transactions_data, "transactions")
+    await writeToCSV(smak_operations_data, "smak_transactions")
 } 
 
 main();
