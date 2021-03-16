@@ -15,38 +15,37 @@ var Tezos = new taquito.TezosToolkit(config.RPC_ADDRESS);
 
 // Import the signer key
 signer.importKey(
-    Tezos, 
-    config.SIGNER_EMAIL, 
-    config.SIGNER_PASSWORD, 
-    config.SIGNER_MNEMONIC, 
+    Tezos,
+    config.SIGNER_EMAIL,
+    config.SIGNER_PASSWORD,
+    config.SIGNER_MNEMONIC,
     config.SIGNER_SECRET
 );
 
 /**
 * Function that originates a smart contract with the signer key
 */
-async function originate()
-{
+async function originate() {
     // Originate the contract
     const originationOp = await Tezos.contract.originate({
         // Smart contract Michelson JSON code
         code: require('./ICO-contract.json'),
         init: storage
     })
-    .catch(error => {
-        console.log(error)
-    });
+        .catch(error => {
+            console.log(error)
+        });
 
     console.log("SmartLink API: Waiting for confirmation of origination for " + originationOp.contractAddress + "...");
-    
+
     // Waiting for the origination to be completed/confirmed 
     await originationOp.confirmation()
-    .catch(error => {
-        console.log(error)
-    });
+        .catch(error => {
+            console.log(error)
+        });
 
     console.log("SmartLink API: Origination completed.");
-    
+
 }
 
 originate();

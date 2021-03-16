@@ -26,27 +26,26 @@ const set_sent_smak = 'UPDATE kyc  SET is_smak_sent = ? WHERE reception_addr LIK
 
 // Import the signer account
 signer.importKey(
-    Tezos, 
-    config.SIGNER_EMAIL, 
-    config.SIGNER_PASSWORD, 
-    config.SIGNER_MNEMONIC, 
+    Tezos,
+    config.SIGNER_EMAIL,
+    config.SIGNER_PASSWORD,
+    config.SIGNER_MNEMONIC,
     config.SIGNER_SECRET
-); 
+);
 
 /**
 * Function that connects to the database, it takes parameters from config file
 * @returns  - database connection
 */
-async function connectToDb()
-{
+async function connectToDb() {
     console.log("Smartlink ICO API: Connecting to the database...");
     const connection = await mysql2.createConnection({
         host: config.DB_HOST,
         user: config.DB_USER,
         password: config.DB_PASSWORD,
         database: config.DB_NAME
-      })
-      .catch(error => {console.log(error)});
+    })
+        .catch(error => { console.log(error) });
 
     return connection;
 }
@@ -55,8 +54,7 @@ async function connectToDb()
 * Function that closes the connection to the database
 * @param connection_to_end - database connection to end
 */
-function endDbConnection(connection_to_end)
-{
+function endDbConnection(connection_to_end) {
     console.log("Smartlink ICO API: Closing connection");
     connection_to_end.end();
     console.log("Smartlink ICO API: Connection closed !");
@@ -67,20 +65,18 @@ function endDbConnection(connection_to_end)
 * Queries the database and divides the retrieved data into batches
 * @return - queried data in batches
 */
-async function getBatchesFromDb(connection)
-{
+async function getBatchesFromDb(connection) {
 
     // Querying the database for participants and their invested amounts
     console.log("Smartlink ICO API: Querying the database...");
-    const [results, columns_def] = await connection.execute(get_participants_and_their_amount);	
-   
+    const [results, columns_def] = await connection.execute(get_participants_and_their_amount);
 
-    if (results === undefined){
+
+    if (results === undefined) {
         throw "ERROR Smartlink ICO API: no response from database";
     }
 
-    if(results.length < 1)
-    { 
+    if (results.length < 1) {
         console.log("Smartlink ICO API: No data to handle!")
     }
 
@@ -97,12 +93,10 @@ async function getBatchesFromDb(connection)
 * @param  {string} tx_hash - transaction hash to be written in the database
 * @return - batch of contract calls ready to be sent
 */
-async function updateKycWithTxHash(connection, data, tx_hash)
-{
+async function updateKycWithTxHash(connection, data, tx_hash) {
     // For a batch, get the reception address, and update the kyc table accordingly
-    for(var i = 0; i < data.length; i++)
-    {
-        await connection.query(set_sent_smak, [tx_hash, data[i].reception_addr]).catch(error => {console.log(error)});
+    for (var i = 0; i < data.length; i++) {
+        await connection.query(set_sent_smak, [tx_hash, data[i].reception_addr]).catch(error => { console.log(error) });
     }
 }
 
@@ -112,17 +106,15 @@ async function updateKycWithTxHash(connection, data, tx_hash)
 * @param  {Object} data	- one batch of data retrieved from the database
 * @return - batch of contract calls ready to be sent
 */
-async function prepareBatchToSendToBlockchain(contract, data)
-{
+async function prepareBatchToSendToBlockchain(contract, data) {
     // Init batch
     const batch = await Tezos.batch();
-    
+
     // Add transactions to send to the batch
-    for(var i = 0; i < data.length; i++)
-    {
+    for (var i = 0; i < data.length; i++) {
         // Computing the SMAK amount to send
         var smakAmount = computeSmakAmount(data[i].total_amount)
-        
+
         // Computing the Freeze Duration
         var duration = computeFreezeDuration()
 
@@ -145,32 +137,30 @@ async function prepareBatchToSendToBlockchain(contract, data)
 * @param connection   - database connection
 * @param  {Object} data_batch	- data in batches retrieved from the database
 */
-async function sendBatchesToBlockchain(connection, data_batch)
-{
+async function sendBatchesToBlockchain(connection, data_batch) {
     // Get the contract
     const contract = await Tezos.contract.at(config.CONTRACT_ADDRESS);
 
     // Prepare the batch to send
-    for(var i = 0; i < data_batch.length; i++)
-    {
+    for (var i = 0; i < data_batch.length; i++) {
         // Preparing the Batch of transactions to sesnd to Blockchain
         console.log("Smartlink ICO API: Preparing the batch n° ", i);
         const batch = await prepareBatchToSendToBlockchain(contract, data_batch[i])
-        
+
         // Send the batch
         console.log("Smartlink ICO API: Sending the batch n° ", i);
         const batchOp = await batch.send().catch(error => {
             console.log(error)
         });
-        
+
         // Wait for batch confirmation
         await batchOp.confirmation();
-        console.log("Smartlink ICO API: The operation of the batch n° "+i+" is confirmed! The hash of the operation is "+ batchOp.hash);
+        console.log("Smartlink ICO API: The operation of the batch n° " + i + " is confirmed! The hash of the operation is " + batchOp.hash);
 
         // Update the database with the new batch transaction hash
         console.log("Smartlink ICO API: Now updating the database...");
-        await updateKycWithTxHash(connection, data_batch[i], batchOp.hash).catch(error => {console.log(error)});
-        console.log("Smartlink ICO API: Database updated! Finished processing batch n° "+i+".");
+        await updateKycWithTxHash(connection, data_batch[i], batchOp.hash).catch(error => { console.log(error) });
+        console.log("Smartlink ICO API: Database updated! Finished processing batch n° " + i + ".");
     }
 }
 
@@ -180,7 +170,7 @@ async function sendBatchesToBlockchain(connection, data_batch)
 * @param {Number} dollarPrice   - price in dollar invested by an investor
 * @returns  {Number} 	- smak amount that must be sent to the investor
 */
-function computeSmakAmount(dollarPrice){
+function computeSmakAmount(dollarPrice) {
     const smakPriceEur = config.SMAK_VALUE
     const smakAccuracy = config.SMAK_ACCURACY
     var smakAmount = Math.ceil(dollarPrice / smakPriceEur * smakAccuracy)
@@ -192,22 +182,22 @@ function computeSmakAmount(dollarPrice){
 * Computes Freeze Duration, substraction between the final date and today's date
 * @returns  {Number} 	- duration in seconds between now and the final date of the ICO
 */
-function computeFreezeDuration(){
+function computeFreezeDuration() {
     // Set the final date
     const finalDate = new Date(config.ICO_DEADLINE)
-    
+
     // This operation returns the number of milliseconds between the two dates
     // If it is negative, this means that the finalDate has expired, so the account needs to be freezed for a default duration
     var datesDiff = finalDate - Date.now()
-    
+
     // Default duration of the freeze
     var duration = 1
 
     // Compute the duration in seconds
-    if(datesDiff >0){
-        duration = Math.ceil(datesDiff/1000)
+    if (datesDiff > 0) {
+        duration = Math.ceil(datesDiff / 1000)
     }
-    
+
     return duration
 }
 
@@ -219,17 +209,16 @@ function computeFreezeDuration(){
 */
 
 function chunk(array, size) {
-	const chunked_arr = [];
-	let copied = [...array]; // ES6 destructuring
-	const numOfChild = Math.ceil(copied.length / size); // Round up to the nearest integer
-	for (let i = 0; i < numOfChild; i++) {
-		chunked_arr.push(copied.splice(0, size));
-	}
-	return chunked_arr;
+    const chunked_arr = [];
+    let copied = [...array]; // ES6 destructuring
+    const numOfChild = Math.ceil(copied.length / size); // Round up to the nearest integer
+    for (let i = 0; i < numOfChild; i++) {
+        chunked_arr.push(copied.splice(0, size));
+    }
+    return chunked_arr;
 }
 
-async function main()
-{
+async function main() {
     // Connect to the database
     const connection = await connectToDb()
 
