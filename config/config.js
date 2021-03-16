@@ -46,10 +46,10 @@ module.exports = {
     REVOLUT_JWT:process.env.REVOLUT_JWT,
 
     // APIs
-    TEZOS_API: process.env.TEZOS_API || 'https://api.delphinet.tzkt.io',
-    BITCOIN_API: process.env.BITCOIN_API || 'https://blockchain.info',
-    ETHEREUM_API: process.env.ETHEREUM_API || 'https://api-ropsten.etherscan.io',
-    REVOLUT_API: process.env.REVOLUT_API || 'https://sandbox-b2b.revolut.com',
+    TEZOS_API: process.env.TEZOS_API,
+    BITCOIN_API: process.env.BITCOIN_API,
+    ETHEREUM_API: process.env.ETHEREUM_API,
+    REVOLUT_API: process.env.REVOLUT_API,
 
     // fixed EUR/USD rate
     EUR_USD_RATE: process.env.EUR_USD_RATE || 0.84
