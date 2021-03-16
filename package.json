@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "cronJob": "node src/cronJob.js",
-    "fetch": "node src/task.js",
+    "task": "node src/task.js",
     "batch": "node src/batch_db_calls/db_batch_calls.js",
     "originate": "node src/contract/originate.js",
     "export": "node src/export_csv/export_csv.js"

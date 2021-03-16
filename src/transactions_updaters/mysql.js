@@ -9,7 +9,7 @@ const config = require('../../config/config.js');	                //env variable
 const mysql2 = require('mysql2/promise'); 			//used to communicate with the DB
 
 
-/////////////////////////////////////////// DATABASE ///////////////////////////////////////////
+/////////////////////////////////////////// MYSQL ///////////////////////////////////////////
 
 /**
 * Function that connects to the database, it takes parameters from config file
