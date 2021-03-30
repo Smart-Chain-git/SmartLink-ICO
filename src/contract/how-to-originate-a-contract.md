@@ -77,6 +77,7 @@ export NODE_ENV=prod
 ``` bash
 echo $NODE_ENV
 ```
+It must output `prod`. 
 
 3. At the root of your project, run:
 ``` bash 
