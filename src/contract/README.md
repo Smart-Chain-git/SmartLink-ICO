@@ -1,4 +1,17 @@
 # How to originate a contract
+## Clone the project from git
+1. In order to clone the project from git, please run:
+``` bash
+# If you do not have an SSH key
+git clone -b develop https://github.com/Smart-Chain-git/SmartLink-ICO.git
+
+# If you have an SSH key
+git clone -b develop git@github.com:Smart-Chain-git/SmartLink-ICO.git
+```
+2. Go to your project directory
+``` bash
+cd SmartLink-ICO
+```
 ## Set-up your environment
 ### Required environment variables
 1. In the folder "config", create (or open it if you already have one!) your local file called `"prod.env"`
@@ -8,8 +21,6 @@
 # signer (smart contract owner) #
 #################################
 
-SIGNER_EMAIL=
-SIGNER_PASSWORD=
 SIGNER_MNEMONIC=
 SIGNER_SECRET=
 ADDRESS=
@@ -48,15 +59,6 @@ node -v
 npm -v
 ```
 
-### Clone the project from git
-In order to clone the project from git, please run:
-``` bash
-# If you do not have an SSH key
-git clone -b develop https://github.com/Smart-Chain-git/SmartLink-ICO.git
-
-# If you have an SSH key
-git clone -b develop git@github.com:Smart-Chain-git/SmartLink-ICO.git
-```
 
 ### Install dependencies
 1. Go to your project directory
