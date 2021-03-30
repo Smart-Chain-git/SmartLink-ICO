@@ -220,7 +220,7 @@
                                 { "prim": "CDR" },
                                 { "prim": "SENDER" },
                                 { "prim": "GET" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "144" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "137" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "CDR" },
                                 { "prim": "COMPARE" },
                                 { "prim": "GE" },
@@ -245,7 +245,7 @@
                                 { "prim": "DUP" },
                                 { "prim": "DUG", "args": [ { "int": "2" } ] },
                                 { "prim": "GET" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "145" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "138" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "CAR" },
                                 { "prim": "DUP", "args": [ { "int": "6" } ] },
                                 { "prim": "DIG", "args": [ { "int": "7" } ] },
@@ -253,11 +253,11 @@
                                 { "prim": "CDR" },
                                 { "prim": "SENDER" },
                                 { "prim": "GET" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "145" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "138" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "CDR" },
                                 { "prim": "SUB" },
                                 { "prim": "ISNAT" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "145" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "138" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "SWAP" },
                                 { "prim": "PAIR" },
                                 { "prim": "SOME" },
@@ -278,7 +278,7 @@
                                 { "prim": "GET", "args": [ { "int": "6" } ] },
                                 { "prim": "SUB" },
                                 { "prim": "ISNAT" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "146" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "139" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "SWAP" },
                                 { "prim": "PAIR" },
                                 { "prim": "SWAP" },
@@ -511,13 +511,7 @@
                             "args": [
                               [],
                               [
-                                {
-                                  "prim": "PUSH",
-                                  "args": [
-                                    { "prim": "string" },
-                                    { "string": "WrongCondition: (params.from_ == sp.sender) | (self.data.balances[params.from_].approvals[sp.sender] >= params.value)" }
-                                  ]
-                                },
+                                { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "You are not authorized to transfer SMAK from this address" } ] },
                                 { "prim": "FAILWITH" }
                               ]
                             ]
@@ -536,13 +530,7 @@
                           { "prim": "GE" },
                           {
                             "prim": "IF",
-                            "args": [
-                              [],
-                              [
-                                { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "WrongCondition: self.data.balances[params.from_].balance >= params.value" } ] },
-                                { "prim": "FAILWITH" }
-                              ]
-                            ]
+                            "args": [ [], [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "You do not have enough SMAK" } ] }, { "prim": "FAILWITH" } ] ]
                           },
                           { "prim": "SWAP" },
                           { "prim": "DUP" },
@@ -570,7 +558,10 @@
                                   "prim": "IF",
                                   "args": [
                                     [],
-                                    [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "account is frozen, transfer is impossible" } ] }, { "prim": "FAILWITH" } ]
+                                    [
+                                      { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "This address is frozen, transfer is impossible" } ] },
+                                      { "prim": "FAILWITH" }
+                                    ]
                                   ]
                                 }
                               ],
@@ -656,12 +647,6 @@
                           { "prim": "SOME" },
                           { "prim": "SWAP" },
                           { "prim": "UPDATE" },
-                          { "prim": "SWAP" },
-                          { "prim": "PAIR" },
-                          { "prim": "PAIR" },
-                          { "prim": "UNPAIR" },
-                          { "prim": "UNPAIR" },
-                          { "prim": "SWAP" },
                           { "prim": "DUP" },
                           { "prim": "DUP", "args": [ { "int": "5" } ] },
                           { "prim": "GET", "args": [ { "int": "3" } ] },
@@ -780,7 +765,7 @@
                                 { "prim": "CDR" },
                                 { "prim": "SENDER" },
                                 { "prim": "GET" },
-                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "104" } ] }, { "prim": "FAILWITH" } ], [] ] },
+                                { "prim": "IF_NONE", "args": [ [ { "prim": "PUSH", "args": [ { "prim": "int" }, { "int": "97" } ] }, { "prim": "FAILWITH" } ], [] ] },
                                 { "prim": "CDR" },
                                 { "prim": "COMPARE" },
                                 { "prim": "GE" },
@@ -789,7 +774,7 @@
                                   "args": [
                                     [],
                                     [
-                                      { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "WrongCondition: self.data.balances[sp.sender].balance >= params.value" } ] },
+                                      { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "There is not enough SMAK on the Freezer account" } ] },
                                       { "prim": "FAILWITH" }
                                     ]
                                   ]
@@ -874,12 +859,6 @@
                                 { "prim": "SOME" },
                                 { "prim": "SWAP" },
                                 { "prim": "UPDATE" },
-                                { "prim": "SWAP" },
-                                { "prim": "PAIR" },
-                                { "prim": "PAIR" },
-                                { "prim": "UNPAIR" },
-                                { "prim": "UNPAIR" },
-                                { "prim": "SWAP" },
                                 { "prim": "DUP" },
                                 { "prim": "DUP", "args": [ { "int": "5" } ] },
                                 { "prim": "CAR" },
@@ -964,7 +943,16 @@
                                   "prim": "IF",
                                   "args": [
                                     [],
-                                    [ { "prim": "PUSH", "args": [ { "prim": "string" }, { "string": "WrongCondition: params.duration > 0" } ] }, { "prim": "FAILWITH" } ]
+                                    [
+                                      {
+                                        "prim": "PUSH",
+                                        "args": [
+                                          { "prim": "string" },
+                                          { "string": "The freeze duration must be greater than 0 seconds. Please use the transfer entry point for a regular transfer." }
+                                        ]
+                                      },
+                                      { "prim": "FAILWITH" }
+                                    ]
                                   ]
                                 },
                                 { "prim": "SWAP" },
