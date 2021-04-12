@@ -21,18 +21,18 @@ In order to insert the data to its corresponding table, please run the following
 
 **Load kyc table:**
 ``` sql
-LOAD DATA  INFILE '<PATH_TO_PROJECT>/kyc.csv' INTO TABLE kyc FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (id_kyc, addr_type, sender_addr, reception_addr, mail, is_smak_sent);
+LOAD DATA  INFILE '<PATH_TO_PROJECT>/kyc.csv' INTO TABLE dxd_smartlink FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (KYCID, addr_type, sender_addr, reception_addr, mail, is_smak_sent);
 ```
 
 **Load blockchain table:**
 ```sql
-LOAD DATA  INFILE '<PATH_TO_PROJECT>/blockchain.csv' INTO TABLE blockchain FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (tx_hash, amount, price_dollar, tx_date, price_date);
+LOAD DATA  INFILE '<PATH_TO_PROJECT>/blockchain.csv' INTO TABLE dxd_blockchain FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (tx_hash, amount, price_dollar, tx_date, price_date);
 
 ```
 
 **Load transactions table:**
 ```sql
-LOAD DATA  INFILE '<PATH_TO_PROJECT>/transactions.csv' INTO TABLE transactions FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (sender_addr,tx_hash);
+LOAD DATA  INFILE '<PATH_TO_PROJECT>/transactions.csv' INTO TABLE dxd_transactions FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (sender_addr,tx_hash);
 
 ```
 
