@@ -47,7 +47,7 @@ function endDbConnection(connection_to_end)
 async function getDBTransactions(co) {
 
     console.log("Smartlink ICO API: Querying the database for the transactions hashes...");
-    const [rows, fields] = await co.execute('SELECT tx_hash FROM blockchain').catch(error => {console.log(error)});
+    const [rows, fields] = await co.execute('SELECT tx_hash FROM dxd_blockchain').catch(error => {console.log(error)});
 
     if (rows === undefined){
         throw "ERROR Smartlink ICO API: no response from database";
@@ -74,8 +74,8 @@ async function addDBTransactions(co, db_txs, txs, coin, price) {
     console.log("Smartlink ICO API: Adding new " + coin + " transactions to the database");
     
     // queries to insert data in the "blockchain" and "transactions" tables
-    const insert_blockchain = 'INSERT INTO blockchain (tx_hash, amount, price_dollar, tx_date, price_date) VALUES (?, ?, ?, ?, ?)';
-    const insert_transactions = 'INSERT INTO transactions (sender_addr, tx_hash) VALUES (?, ?)';
+    const insert_blockchain = 'INSERT INTO dxd_blockchain (tx_hash, amount, price_dollar, tx_date, price_date) VALUES (?, ?, ?, ?, ?)';
+    const insert_transactions = 'INSERT INTO dxd_transactions (sender_addr, tx_hash) VALUES (?, ?)';
 
     let index = index2 = blockchain_counter = transactions_counter = 0;
     const txs_nb = txs.length;

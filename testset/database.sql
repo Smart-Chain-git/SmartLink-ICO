@@ -3,8 +3,8 @@ drop database smart_link_ICO;
 create database smart_link_ICO;
 use smart_link_ICO;
 
-create table kyc (
-    id_kyc varchar(255), 
+create table dxd_smartlink (
+    KYCID varchar(255), 
     addr_type ENUM('USD','EUR','BTC','ETH','XTZ'), 
     sender_addr varchar(255), 
     reception_addr varchar(255), 
@@ -13,7 +13,7 @@ create table kyc (
     primary key (sender_addr)
 );
 
-create table blockchain (
+create table dxd_blockchain (
     tx_hash varchar(255) NOT NULL, 
     amount varchar(255), 
     price_dollar varchar(255), 
@@ -22,9 +22,9 @@ create table blockchain (
     primary key (tx_hash)
 );
 
-create table transactions (
-    sender_addr varchar(255) not null references kyc(sender_addr), 
-    tx_hash varchar(255) not null references blockchain(tx_hash),
+create table dxd_transactions (
+    sender_addr varchar(255) not null references dxd_smartlink(sender_addr), 
+    tx_hash varchar(255) not null references dxd_blockchain(tx_hash),
     primary key (tx_hash, sender_addr)
 );
 
