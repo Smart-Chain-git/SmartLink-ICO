@@ -24,15 +24,6 @@ const get_participants_and_their_amount = 'SELECT reception_addr, sum(amount*pri
  */
 const set_sent_smak = 'UPDATE dxd_smartlink  SET is_smak_sent = ? WHERE reception_addr LIKE ?';
 
-// Import the signer account
-signer.importKey(
-    Tezos,
-    config.SIGNER_EMAIL,
-    config.SIGNER_PASSWORD,
-    config.SIGNER_MNEMONIC,
-    config.SIGNER_SECRET
-);
-
 /**
 * Function that connects to the database, it takes parameters from config file
 * @returns  - database connection
@@ -138,6 +129,24 @@ async function prepareBatchToSendToBlockchain(contract, data) {
 * @param  {Object} data_batch	- data in batches retrieved from the database
 */
 async function sendBatchesToBlockchain(connection, data_batch) {
+
+    if (config.NODE_ENV == "development"){
+        // Import the signer account
+        signer.importKey(
+            Tezos,
+            config.SIGNER_EMAIL,
+            config.SIGNER_PASSWORD,
+            config.SIGNER_MNEMONIC,
+            config.SIGNER_SECRET
+        );
+
+    }
+    else {
+        //import signer
+        const s = await signer.InMemorySigner.fromSecretKey(config.SIGNER_SECRET, config.SIGNER_MNEMONIC)
+        Tezos.setProvider({ signer: s });
+    }
+
     // Get the contract
     const contract = await Tezos.contract.at(config.CONTRACT_ADDRESS);
 
