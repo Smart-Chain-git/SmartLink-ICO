@@ -40,6 +40,7 @@ function parseEthereumTxs(txs) {
     const res = txs.map(x => { 
         return {
                     "sender": [x['from']],
+                    "receiver": config.ETHEREUMADDRESS,
                     "amount": (x['value'].slice(0, -10)/100000000).toString(),   // ethereum has a 10e-18 precision, we reduce it to 10e-8
                     "timestamp": parseInt(x['timeStamp'], 10),
                     "hash": x['hash'],

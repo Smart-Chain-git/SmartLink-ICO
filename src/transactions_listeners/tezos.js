@@ -43,6 +43,7 @@ function parseTezosTxs(txs) {
     const res = txs.map(x => {
         return {
                     "sender": [x['sender']['address']],
+                    "receiver": config.TEZOSADDRESS,
                     "amount": (x['amount']/1000000).toString(),
                     "timestamp": new Date(x['timestamp'])/1000,
                     "hash": x['hash'],

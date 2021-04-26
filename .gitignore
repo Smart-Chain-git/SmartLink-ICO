@@ -5,6 +5,7 @@ package-lock.json
 src/contract/originate.js
 output/*
 output/
+logs
 
 # local env files
 *.env

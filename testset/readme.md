@@ -26,7 +26,7 @@ LOAD DATA  INFILE '<PATH_TO_PROJECT>/kyc.csv' INTO TABLE dxd_smartlink FIELDS TE
 
 **Load blockchain table:**
 ```sql
-LOAD DATA  INFILE '<PATH_TO_PROJECT>/blockchain.csv' INTO TABLE dxd_blockchain FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (tx_hash, amount, price_dollar, tx_date, price_date);
+LOAD DATA  INFILE '<PATH_TO_PROJECT>/blockchain.csv' INTO TABLE dxd_blockchain FIELDS TERMINATED BY ',' optionally enclosed by '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (tx_type, tx_hash, amount, price_dollar, tx_date, price_date);
 
 ```
 

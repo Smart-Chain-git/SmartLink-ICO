@@ -32,7 +32,7 @@ async function task() {
     const token = await revolut.connectRevolut();
     const txs = await revolut.getRevolutTxs(token);
     const ptxs = await revolut.parseRevolutTxs(txs);
-    const [usd_txs, eur_txs] = revolut.getValidRevolutTxs(ptxs);
+    const [vusd, veur] = revolut.getValidRevolutTxs(ptxs);
 
 
     // gets last prices of BTC, ETH and XTZ in USD
@@ -44,8 +44,8 @@ async function task() {
     await mysql.addDBTransactions(co, db_txs, vbtc, "Bitcoin", last_prices.bitcoin);
     await mysql.addDBTransactions(co, db_txs, veth, "Ethereum", last_prices.ethereum);
     await mysql.addDBTransactions(co, db_txs, vxtz, "Tezos", last_prices.tezos);
-    await mysql.addDBTransactions(co, db_txs, usd_txs, "Revolut (USD)", {"usd":1,"last_updated_at":new Date().setMilliseconds(0)/1000});
-    await mysql.addDBTransactions(co, db_txs, eur_txs, "Revolut (EUR)", {"usd":config.EUR_USD_RATE,"last_updated_at":new Date().setMilliseconds(0)/1000});
+    await mysql.addDBTransactions(co, db_txs, vusd, "Revolut (USD)", {"usd":1,"last_updated_at":new Date().setMilliseconds(0)/1000});
+    await mysql.addDBTransactions(co, db_txs, veur, "Revolut (EUR)", {"usd":config.EUR_USD_RATE,"last_updated_at":new Date().setMilliseconds(0)/1000});
     mysql.endDbConnection(co);
 }
 

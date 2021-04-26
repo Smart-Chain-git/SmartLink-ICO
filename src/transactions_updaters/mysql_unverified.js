@@ -22,7 +22,6 @@ async function connectToDb() {
         password: config.DB_PASSWORD,
         database: config.DB_NAME
       }).catch(error => {console.log(error)});
-      console.log("Smartlink ICO API: Database connected !");
     return connection;
 }
 
@@ -33,7 +32,6 @@ async function connectToDb() {
 */
 function endDbConnection(connection_to_end)
 {
-    console.log("Smartlink ICO API: Closing connection...");
     connection_to_end.end();
     console.log("Smartlink ICO API: Connection closed !");
 }
@@ -46,15 +44,13 @@ function endDbConnection(connection_to_end)
 */
 async function getDBTransactions(co) {
 
-    console.log("Smartlink ICO API: Querying the database for the transactions hashes...");
-    const [rows, fields] = await co.execute('SELECT tx_hash FROM dxd_blockchain').catch(error => {console.log(error)});
+    const [rows, fields] = await co.execute('SELECT tx_hash FROM dxd_blockchain_unverified').catch(error => {console.log(error)});
 
     if (rows === undefined){
         throw "ERROR Smartlink ICO API: no response from database";
     }
 
     const res = rows.map(x => { return x['tx_hash']});
-    console.log("Smartlink ICO API: " + res.length + " transactions returned");
     return res;
 }
 
@@ -67,10 +63,9 @@ async function getDBTransactions(co) {
 */
 async function getDBLastTransactionTimestamp(co, tx_type) {
 
-    console.log("Smartlink ICO API: Querying the database for the last transaction timestamp...");
 
     // query to get the timestamp of the last transaction of a specified type
-    const query = 'SELECT MAX(tx_date) FROM dxd_blockchain WHERE tx_type = ?';
+    const query = 'SELECT MAX(tx_date) FROM dxd_blockchain_unverified WHERE tx_type = ?';
 
     const [res, fields] = await co.query(query, tx_type).catch(error => {console.log(error)});
 
@@ -78,7 +73,6 @@ async function getDBLastTransactionTimestamp(co, tx_type) {
         throw "ERROR Smartlink ICO API: no response from database";
     }
 
-    console.log("Smartlink ICO API: last transaction timestamp is : " + res);
     return res;
 }
 
@@ -95,11 +89,10 @@ async function getDBLastTransactionTimestamp(co, tx_type) {
 */
 async function addDBTransactions(co, db_txs, txs, coin, price) {
 
-    console.log("Smartlink ICO API: Adding new " + coin + " transactions to the database");
     
     // queries to insert data in the "blockchain" and "transactions" tables
-    const insert_blockchain = 'INSERT INTO dxd_blockchain (tx_type, tx_hash, amount, price_dollar, tx_date, price_date) VALUES (?, ?, ?, ?, ?, ?)';
-    const insert_transactions = 'INSERT INTO dxd_transactions (sender_addr, tx_hash) VALUES (?, ?)';
+    const insert_blockchain = 'INSERT INTO dxd_blockchain_unverified (tx_type, tx_hash, amount, price_dollar, tx_date, price_date) VALUES (?, ?, ?, ?, ?, ?)';
+    const insert_transactions = 'INSERT INTO dxd_transactions_unverified (sender_addr, tx_hash) VALUES (?, ?)';
 
     let index = index2 = blockchain_counter = transactions_counter = 0;
     const txs_nb = txs.length;
@@ -108,7 +101,7 @@ async function addDBTransactions(co, db_txs, txs, coin, price) {
         
         // checks for each transaction to be added of the transaction is already in the database
         if (!db_txs.includes(txs[index].hash)) {
-            
+
             // checks the type of transaction
             var tx_type;
             if (txs[index].receiver == config.BITCOINADDRESS){tx_type = "BTC";}
@@ -127,9 +120,6 @@ async function addDBTransactions(co, db_txs, txs, coin, price) {
             }
         }   
     }
-    // shows counters of rows inserted for each tables
-    console.log("Smartlink ICO API: " + blockchain_counter + " rows added in table blockchain");
-    console.log("Smartlink ICO API: " + transactions_counter + " rows added in table transactions");
 }
 
 

@@ -1,4 +1,5 @@
-const task = require('./task.js');
+const task = require('./get_last_transactions.js');
+const task2 = require('./get_last_unverified_transactions.js');
 
 var CronJob = require('cron').CronJob;
 
@@ -8,3 +9,10 @@ var job = new CronJob('0 */20 * * * *',function(){
 }, null, true, 'Europe/Paris');
 
 job.start();
+
+// runs the job every 20 seconds
+var job2 = new CronJob('*/20 * * * * *',function(){
+  task2.task();
+}, null, true, 'Europe/Paris');
+
+job2.start();

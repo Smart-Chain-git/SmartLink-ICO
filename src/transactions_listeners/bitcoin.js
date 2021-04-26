@@ -40,6 +40,7 @@ function parseBitcoinTxs(txs) {
     const res = txs.map(x => {
         return {
                     "sender": x['inputs'].map(x => {return x['prev_out']['addr']}), // retourne l'ensemble des utxos entrantes
+                    "receiver": config.BITCOINADDRESS,
                     "block": x['block_height'],
                     "amount": (x['result']/100000000).toString(),
                     "timestamp": x['time'],
