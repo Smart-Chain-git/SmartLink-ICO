@@ -52,6 +52,8 @@ module.exports = {
     REVOLUT_API: process.env.REVOLUT_API,
 
     // fixed EUR/USD rate
-    EUR_USD_RATE: process.env.EUR_USD_RATE || 0.84
+    EUR_USD_RATE: process.env.EUR_USD_RATE || 0.84,
+    SMAK_PRE_SALE: process.env.SMAK_PRE_SALE || 0.007,
+    SMAK_ICO: process.env.SMAK_ICO || 0.01
 
   }

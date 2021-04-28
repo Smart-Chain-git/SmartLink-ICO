@@ -31,7 +31,7 @@ async function updateNoICO(co, addresses) {
 
 async function main() {
     const connection = await connectToDb();
-    const data = await updateNoICO(connection, [])
+    await updateNoICO(connection, [])
     endDbConnection(connection)
 }
 

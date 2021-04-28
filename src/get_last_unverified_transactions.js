@@ -40,7 +40,7 @@ async function task() {
 
     // adds new transactions to the database
     const co2 = await mysql.connectToDb();
-    const db_txs = await mysql.getDBTransactions(co);
+    const db_txs = await mysql.getDBTransactions(co2);
     await mysql.addDBTransactions(co2, db_txs, nbtc, "Bitcoin", last_prices.bitcoin);
     await mysql.addDBTransactions(co2, db_txs, neth, "Ethereum", last_prices.ethereum);
     await mysql.addDBTransactions(co2, db_txs, nxtz, "Tezos", last_prices.tezos);
