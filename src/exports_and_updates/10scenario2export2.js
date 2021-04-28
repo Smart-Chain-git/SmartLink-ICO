@@ -4,7 +4,7 @@
  
  const config = require('../../config/config.js'); // Used to retrieve configuration variables
  
- const query = 'SELECT mail, @sender := sender_addr, reception_addr, FROM_UNIXTIME(vaidation_date) AS kyc_validation, (SELECT sum(b.amount*b.price_dollar) FROM dxd_transactions t INNER JOIN dxd_blockchain b ON b.tx_hash = t.tx_hash WHERE t.sender_addr = @sender AND b.tx_date < 1620234000) AS total_amount_usd FROM dxd_smartlinkcopy WHERE KYCStatus = "APPROVED" AND vaidation_date <= 1619197200 AND No_ICO != "TRUE" ORDER BY kyc_validation;';
+ const query = 'SELECT mail, @sender := sender_addr, reception_addr, FROM_UNIXTIME(validation_date) AS kyc_validation, (SELECT sum(b.amount*b.price_dollar) FROM dxd_transactions t INNER JOIN dxd_blockchain b ON b.tx_hash = t.tx_hash WHERE t.sender_addr = @sender AND b.tx_date < 1620234000) AS total_amount_usd FROM dxd_smartlinkcopy WHERE KYCStatus = "APPROVED" AND validation_date <= 1619197200 AND No_ICO != "TRUE" ORDER BY kyc_validation;';
 
 ////////////////////// DB ////////////////////////////////
  async function connectToDb() {

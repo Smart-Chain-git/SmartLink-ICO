@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "cronJob": "node src/cronJob.js",
-    "task": "node src/task.js",
     "batch": "node src/batch_db_calls/db_batch_calls.js",
     "originate": "node src/contract/originate.js",
     "export": "node src/export_csv/export_csv.js"
@@ -18,6 +17,7 @@
     "core-js": "^3.6.5",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
+    "fs": "^0.0.1-security",
     "mysql2": "^2.2.5"
   },
   "devDependencies": {

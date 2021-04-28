@@ -65,7 +65,7 @@ async function getDBLastTransactionTimestamp(co, tx_type) {
 
 
     // query to get the timestamp of the last transaction of a specified type
-    const query = 'SELECT MAX(tx_date) FROM dxd_blockchain_unverified WHERE tx_type = ?';
+    const query = 'SELECT MAX(tx_date) AS last_date FROM dxd_blockchain_unverified WHERE tx_type = ?';
 
     const [res, fields] = await co.query(query, tx_type).catch(error => {console.log(error)});
 
@@ -73,7 +73,7 @@ async function getDBLastTransactionTimestamp(co, tx_type) {
         throw "ERROR Smartlink ICO API: no response from database";
     }
 
-    return res;
+    return res[0].last_date;
 }
 
 
