@@ -19,9 +19,22 @@ var Tezos = new taquito.TezosToolkit(config.RPC_ADDRESS);
 */
 async function originate() {
    
-    //import signer
-    const s = await signer.InMemorySigner.fromSecretKey(config.SIGNER_SECRET, config.SIGNER_MNEMONIC)
-    Tezos.setProvider({ signer: s });
+    if (config.NODE_ENV == "development"){
+        // Import the signer account
+        signer.importKey(
+            Tezos,
+            config.SIGNER_EMAIL,
+            config.SIGNER_PASSWORD,
+            config.SIGNER_MNEMONIC,
+            config.SIGNER_SECRET
+        );
+
+    }
+    else {
+        //import signer
+        const s = await signer.InMemorySigner.fromSecretKey(config.SIGNER_SECRET, config.SIGNER_MNEMONIC)
+        Tezos.setProvider({ signer: s });
+    }
 
     // Originate the contract
     const originationOp = await Tezos.contract.originate({
