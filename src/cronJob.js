@@ -10,8 +10,8 @@ var job = new CronJob('0 */20 * * * *',function(){
 
 job.start();
 
-// runs the job every 10 seconds
-var job2 = new CronJob('*/10 * * * * *',function(){
+// runs the job every minutes
+var job2 = new CronJob('0 * * * * *',function(){
   task2.task();
 }, null, true, 'Europe/Paris');
 
