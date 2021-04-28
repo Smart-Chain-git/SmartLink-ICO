@@ -7,7 +7,7 @@
 */
 function getLastTransactions(txs, tx_type, last_updated_at) {
     const res = txs.filter(x => x['timestamp'] >= last_updated_at);
-    console.log("Smartlink ICO API: " + res.length + " new " + tx_type + " transactions");
+    console.log("Smartlink ICO API: " + (res.length - 1) + " new " + tx_type + " transactions");
     return res;
 }
 
