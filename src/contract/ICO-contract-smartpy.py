@@ -315,29 +315,29 @@ if "templates" not in __name__:
         scenario.h2("Balance")
         view_balance = Viewer(sp.TNat)
         scenario += view_balance
-        scenario += c1.getBalance((alice.address, view_balance.typed))
+        scenario += c1.getBalance((alice.address, view_balance.typed.target))
         scenario.verify_equal(view_balance.data.last, sp.some(7))
 
         scenario.h2("Administrator")
         view_administrator = Viewer(sp.TAddress)
         scenario += view_administrator
-        scenario += c1.getAdministrator((sp.unit, view_administrator.typed))
+        scenario += c1.getAdministrator((sp.unit, view_administrator.typed.target))
         scenario.verify_equal(view_administrator.data.last, sp.some(admin.address))
 
         scenario.h2("Total Supply")
         view_totalSupply = Viewer(sp.TNat)
         scenario += view_totalSupply
-        scenario += c1.getTotalSupply((sp.unit, view_totalSupply.typed))
+        scenario += c1.getTotalSupply((sp.unit, view_totalSupply.typed.target))
         scenario.verify_equal(view_totalSupply.data.last, sp.some(27))
 
         scenario.h2("Allowance")
         view_allowance = Viewer(sp.TNat)
         scenario += view_allowance
-        scenario += c1.getAllowance((sp.record(owner = alice.address, spender = bob.address), view_allowance.typed))
+        scenario += c1.getAllowance((sp.record(owner = alice.address, spender = bob.address), view_allowance.typed.target))
         scenario.verify_equal(view_allowance.data.last, sp.some(1))
         
         scenario.h2("Frozen accounts")
         view_frozenAccounts = Viewer(sp.TBigMap(sp.TAddress, sp.TTimestamp))
         scenario += view_frozenAccounts
-        scenario += c1.getFrozenAccounts((sp.unit, view_frozenAccounts.typed))
+        scenario += c1.getFrozenAccounts((sp.unit, view_frozenAccounts.typed.target))
         scenario.verify_equal(view_frozenAccounts.data.last, sp.some(sp.big_map({bob.address:sp.timestamp(20000001)})))
