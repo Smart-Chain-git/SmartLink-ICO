@@ -61,7 +61,7 @@ async function getBatchesFromDb(connection) {
     // Querying the database for participants and their invested amounts
     console.log("Smartlink ICO API: Querying the database...");
     const [results, columns_def] = await connection.execute(get_participants_and_their_amount);
-
+    console.log(results);
     if (results === undefined) {
         throw "ERROR Smartlink ICO API: no response from database";
     }
@@ -69,7 +69,6 @@ async function getBatchesFromDb(connection) {
     if (results.length < 1) {
         console.log("Smartlink ICO API: No data to handle!")
     }
-    
     // Batching the results
     const data_batches = await chunk(results, config.TRANSACTIONS_PER_BATCH);
     return data_batches;
@@ -98,19 +97,16 @@ async function updateKycWithTxHash(connection, data, tx_hash) {
 async function prepareBatchToSendToBlockchain(contract, data) {
     // Init batch
     const batch = await Tezos.batch();
-    console.log(data.length)
     // Add transactions to send to the batch
     for (var i = 0; i < data.length; i++) {
         // Add to batch the transfer and Freeze transaction call
-        let a = Number(data[i].SMAK)
-        console.log(data[i].reception_addr)
-        console.log(typeof(a))
+        const smakAccuracy = config.SMAK_ACCURACY
+        let a = Math.ceil(data[i].SMAK*smakAccuracy)
         batch.withContractCall(
-            contract.methods.transferAndFreeze(
-                //config.ADDRESS,
+            contract.methods.transfer(
+                config.ADDRESS,
                 data[i].reception_addr,
-                a,
-                1
+                a
             )
         )
     }
@@ -142,7 +138,7 @@ async function sendBatchesToBlockchain(connection, data_batch) {
         const s = await signer.InMemorySigner.fromSecretKey(config.SIGNER_SECRET, config.SIGNER_MNEMONIC)
         Tezos.setProvider({ signer: s });
     }
-
+    
     // Get the contract
     const contract = await Tezos.contract.at(config.CONTRACT_ADDRESS);
     // Prepare the batch to send
@@ -156,7 +152,6 @@ async function sendBatchesToBlockchain(connection, data_batch) {
         const batchOp = await batch.send().catch(error => {
             console.log(error)
         });
-        console.log("ok")
         // Wait for batch confirmation
         await batchOp.confirmation();
         console.log("Smartlink ICO API: The operation of the batch n° " + i + " is confirmed! The hash of the operation is " + batchOp.hash);
@@ -166,6 +161,20 @@ async function sendBatchesToBlockchain(connection, data_batch) {
         await updateKycWithTxHash(connection, data_batch[i], batchOp.hash).catch(error => { console.log(error) });
         console.log("Smartlink ICO API: Database updated! Finished processing batch n° " + i + ".");
     }
+   /*
+    const amount = 2;
+    const address = 'tz1eg98CkHRK3yp8QtYsz8c9XsGcozB9dn7J';
+    
+    console.log(`Transfering ${amount} ꜩ to ${address}...`);
+    Tezos.contract
+      .transfer({ to: address, amount: amount })
+      .then((op) => {
+        console.log(`Waiting for ${op.hash} to be confirmed...`);
+        return op.confirmation(1).then(() => op.hash);
+      })
+      .then((hash) => console.log(`Operation injected: https://florence.tzstats.com/${hash}`))
+      .catch((error) => console.log(`Error: ${error} ${JSON.stringify(error, null, 2)}`));
+      */
 }
 
 /////////////////////////////////////////// UTILITY FUNCTIONS ///////////////////////////////////////////
